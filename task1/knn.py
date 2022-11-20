@@ -34,7 +34,7 @@ def extract_features(file_path, size):
     pick_in.close()
 
 
-def train(test_size, neighbors, metric):
+def train(test_size, random_state, neighbors, metric):
     pick_in = open(DATA_EXTRACTED_FILE_PATH, 'rb')
     data = pickle.load(pick_in)
     pick_in.close()
@@ -46,7 +46,7 @@ def train(test_size, neighbors, metric):
         features.append(feature)
         labels.append(label)
 
-    X_train, X_test, y_train, y_test =  train_test_split(features, labels, test_size = test_size)
+    X_train, X_test, y_train, y_test =  train_test_split(features, labels, test_size = test_size, random_state = random_state)
 
     scaler = preprocessing.MinMaxScaler()
     X_train = scaler.fit_transform(X_train)
@@ -69,6 +69,7 @@ def train(test_size, neighbors, metric):
 argument_parser = ArgumentParser()
 argument_parser.add_argument("-d", "--description", required = True, help = "Path to txt file. The txt file describes, per line, the path to image and its label. Example: data/image.jpg 0")
 argument_parser.add_argument("-ts", "--testsize", required = False, default = 0.5, type = float, help = "Percent of the dataset used to test")
+argument_parser.add_argument("-rs", "--randomstate", required = False, default = random.randint(0, 20), type = int, help = "Random state to shuffle database")
 argument_parser.add_argument("-n", "--neighbors", required = False, default = 3, type = int, help = "How many neighbors to KNN classifier")
 argument_parser.add_argument("-s", "--size", required = False, default = 30, type = int, help = "Size to resize images")
 argument_parser.add_argument("-m", "--metric", required = False, default = "euclidean", help = "Metric to KNN classifier")
@@ -82,6 +83,9 @@ if not file_exists: print("The file does not exists or is not a file") and exit(
 test_size = arguments["testsize"]
 if test_size < 0.0 or test_size > 1.0: print("Invalid percent") and exit()
 
+random_state = arguments["randomstate"]
+if random_state < 0: print("Invalid random state") and exit()
+
 neighbors = arguments["neighbors"]
 if neighbors <= 0: print("Invalid neighbors for KNN") and exit()
 
@@ -92,4 +96,4 @@ metric = arguments["metric"]
 print("I' assuming that you are selecting a valida metric") #https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
 
 extract_features(file_path = description, size = size)
-train(test_size = test_size, neighbors = neighbors, metric = metric)
+train(test_size = test_size, random_state = random_state, neighbors = neighbors, metric = metric)
