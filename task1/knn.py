@@ -93,7 +93,11 @@ size = arguments["size"]
 if size <= 0: print("Invalid size for resizing") and exit()
 
 metric = arguments["metric"]
-print("I' assuming that you are selecting a valida metric") #https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
+print("I' assuming that you are selecting a valida metric\n\n") #https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsClassifier.html
+print(f'Test size: {test_size}')
+print(f'Random state: {random_state}')
+print(f'Neighbors qnt: {neighbors}')
+print(f'Metric : {metric}')
 
 extract_features(file_path = description, size = size)
 train(test_size = test_size, random_state = random_state, neighbors = neighbors, metric = metric)
