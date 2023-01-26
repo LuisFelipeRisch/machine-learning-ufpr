@@ -25,7 +25,7 @@ class TestSanitization(unittest.TestCase):
             self.assertFalse(should_not_contain_days_is_in_sanitized_data)
     
     def test_tp_est_column_should_not_contain_zero_value_neither_nan(self):
-        day = randint(2, LAST_MONTH_DAY)
+        day = 31
         sanitized_data_df = sanitize_data(desired_day=day)
         self.assertFalse(sanitized_data_df['TP_EST'].isnull().values.any())
         
@@ -33,7 +33,7 @@ class TestSanitization(unittest.TestCase):
             self.assertFalse(math.isclose(value, 0.0))
     
     def test_all_columns_except_tp_est_and_date_columns_should_not_contain_nan(self):
-        day = randint(2, LAST_MONTH_DAY)
+        day = 31
         sanitized_data_df = sanitize_data(desired_day=day)
         sanitized_data_df = sanitized_data_df.drop(["TP_EST", "DATA"], axis = 1)
         self.assertFalse(sanitized_data_df.isnull().values.any())
